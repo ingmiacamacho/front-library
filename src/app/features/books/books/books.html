@@ -1,0 +1,137 @@
+
+<section class="books-container">
+
+    <div class="header">
+      <div>
+        <h2>Gestión de libros</h2>
+        <p>Administra los libros de tu biblioteca</p>
+      </div>
+  
+      <div class="header-actions">
+        <span class="total">
+          Total de libros: {{ books().length }}
+        </span>
+  
+        <button class="btn-create" (click)="openForm()">
+          + Crear libro
+        </button>
+      </div>
+    </div>
+  
+    @if (books().length > 0) {
+  
+      <div class="table-container">
+        <table>
+          <thead>
+            <tr>
+              <th>Título</th>
+              <th>Autor</th>
+              <th>ISBN</th>
+              <th>Año</th>
+            </tr>
+          </thead>
+  
+          <tbody>
+            @for (book of books(); track book._id) {
+              <tr>
+                <td>{{ book.title }}</td>
+                <td>{{ book.author.name }}</td>
+                <td>{{ book.isbn }}</td>
+                <td>{{ book.year }}</td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+  
+    } @else {
+  
+      <div class="empty-message">
+        <h3>No hay libros registrados</h3>
+        <p>Cuando agregues libros, aparecerán aquí.</p>
+      </div>
+  
+    }
+  
+  </section>
+  
+  @if (showForm()) {
+  
+    <div class="modal-overlay">
+  
+      <div class="modal">
+  
+        <h2>Registrar nuevo libro</h2>
+        <p>Ingresa la información del libro.</p>
+  
+        <form (ngSubmit)="saveBook()">
+  
+          <label for="title">Título del libro</label>
+          <input
+            id="title"
+            type="text"
+            name="title"
+            [(ngModel)]="title"
+            placeholder="Nombre del libro"
+            required
+          />
+  
+          <label for="isbn">ISBN</label>
+          <input
+            id="isbn"
+            type="text"
+            name="isbn"
+            [(ngModel)]="isbn"
+            placeholder="Código ISBN"
+            required
+          />
+  
+          <label for="author">Autor</label>
+          <select
+            id="author"
+            name="authorId"
+            [(ngModel)]="authorId"
+            required
+          >
+            <option value="">Selecciona un autor</option>
+  
+            @for (author of authors(); track author._id) {
+              <option [value]="author._id">
+                {{ author.name }}
+              </option>
+            }
+  
+          </select>
+  
+          <label for="year">Año de publicación</label>
+          <input
+            id="year"
+            type="number"
+            name="year"
+            [(ngModel)]="year"
+            placeholder="Ejemplo: 1967"
+            required
+          />
+  
+          <div class="modal-actions">
+            <button
+              type="button"
+              class="btn-cancel"
+              (click)="closeForm()"
+            >
+              Cancelar
+            </button>
+  
+            <button type="submit" class="btn-save">
+              Guardar libro
+            </button>
+          </div>
+  
+        </form>
+  
+      </div>
+  
+    </div>
+  
+  }
+  
